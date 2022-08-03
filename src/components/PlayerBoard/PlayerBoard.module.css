@@ -1,0 +1,19 @@
+.patternLines {
+
+}
+.tileSpace {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    border: 1px solid silver;
+}
+.floorLineContainer {
+    display: flex;
+    background-color: antiquewhite;
+}
+.floorTile {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    border: 1px solid silver;
+}
