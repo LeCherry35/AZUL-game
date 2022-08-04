@@ -11,8 +11,12 @@ function Table() {
 
     useEffect(() => {
         startGame()
+        createWall()
     },[])
     
+    const createWall = () => {
+        dispatch({type: 'CREATE_WALL'})
+    }
     const startGame = () => {
         dispatch({type: 'START_GAME'})
     }
@@ -30,7 +34,7 @@ function Table() {
             <FactoryDisplay tiles={table[5]}/>
             <FactoryDisplay tiles={table[0]} minusOne={minusOne}/>
 
-            {!roundStarted && <button onClick={fillDisplays}>Роздать</button>}
+            {!roundStarted && <button onClick={fillDisplays}>Раздать</button>}
             
             
         </div>

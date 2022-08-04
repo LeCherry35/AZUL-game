@@ -22,11 +22,6 @@ function FactoryDisplay(props) {
                         className={s.tile}
                         onDragStart={(e) => dragStartHandler(e,tile)}
                         onDragEnd={(e) => {dragEndHandler(e)}}
-                        // onDragLeave={}
-                        // onDragEnd={}
-                        // onDragOver={}
-                        // onDrop={}
-
                         key={key} 
                         draggable={true} 
                         style ={{background: tile.color}}></div>
