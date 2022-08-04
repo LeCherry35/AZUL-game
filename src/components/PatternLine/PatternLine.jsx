@@ -6,7 +6,9 @@ const PatternLine = (props) => {
     const dispatch = useDispatch()
     const currentColor = useSelector(state => state.pickedTiles[0]?.color)
     const currentLine = useSelector(state => state.playerBoards[0].patternLines[props.size - 1])
+    const wall = useSelector(state => state.playerBoards[0].wall)
     
+
     const line = Array(props.size).fill('')
     for(let i = 0; i < props.tiles.tilesQ; i++) {
         line[i]  = props.tiles.color
@@ -15,7 +17,14 @@ const PatternLine = (props) => {
     const dragOverHandler = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        e.target.style.background = ((currentColor === props.tiles.color && !currentLine.full) || !currentLine.color) ? 'lightgreen' : 'lightpink'
+        let filled
+        for(let tileSpace of wall[props.size - 1]) {
+            if (currentColor === tileSpace.color) {
+                filled = tileSpace.filled
+            }
+        }
+        
+        e.target.style.background = (((currentColor === props.tiles.color && !currentLine.full) || !currentLine.color) && !filled) ? 'lightgreen' : 'lightpink'
     }
     const dragLeaveHandler = (e) => {
         e.target.style.background = 'white'

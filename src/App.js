@@ -1,16 +1,24 @@
 import './App.css';
-import PlayerBoard from './components/PlayerBoard/PlayerBoard';
-import Table from './components/Table/Table';
-import { useDispatch, useSelector } from "react-redux";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Link
+} from "react-router-dom";
+import Game from './components/Game/Game';
 
 function App() {
 
   return (
     
     <div className="App">
-
-      <Table />
-      <PlayerBoard />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/game" element={<Game />} />
+        </Routes>
+      <Link to="/game">Start game</Link>
+      </BrowserRouter>
+      
 
     </div>
   );

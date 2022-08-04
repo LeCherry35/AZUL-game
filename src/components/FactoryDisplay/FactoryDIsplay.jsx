@@ -17,6 +17,7 @@ function FactoryDisplay(props) {
         <div className={s.factoryDisplay}>
             {props.minusOne &&  <div className={s.tile}> -1 </div>}
             {props.tiles.map((tile, key) => {
+                
                 return (
                     <div 
                         className={s.tile}
@@ -24,7 +25,7 @@ function FactoryDisplay(props) {
                         onDragEnd={(e) => {dragEndHandler(e)}}
                         key={key} 
                         draggable={true} 
-                        style ={{background: tile.color}}></div>
+                        style ={{background: tile.color, cursor: "grab"}}></div>
                 )
                 
             } )}

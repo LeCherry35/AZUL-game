@@ -18,6 +18,24 @@ const initialState = {
         floorLine: [],
         wall:[],
         score: 0
+    },
+    {
+        patternLines: [{}, {}, {}, {}, {}],
+        floorLine: [],
+        wall:[],
+        score: 0
+    },
+    {
+        patternLines: [{}, {}, {}, {}, {}],
+        floorLine: [],
+        wall:[],
+        score: 0
+    },
+    {
+        patternLines: [{}, {}, {}, {}, {}],
+        floorLine: [],
+        wall:[],
+        score: 0
     }
   ],
 
@@ -27,15 +45,12 @@ const initialState = {
   pickedTiles: [],
   dropTiles: [],
 
+  player: 1,
+
   roundStarted: false
 
 }
 
-const scoreCounter = (condition, k, action) => {
-    if(condition(k)) {
-        scoreCounter(condition, k + 1, action)
-    }
-}
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -111,8 +126,14 @@ const reducer = (state = initialState, action) => {
             const playerBoard = stateCopy.playerBoards[0] 
             const lines = playerBoard.patternLines
             let extraTiles
+            let filled
+            for(let tileSpace of playerBoard.wall[lineN]) {
+                if (color === tileSpace.color) {
+                    filled = tileSpace.filled
+                }
+            }
             
-            if(color === lines[lineN].color || !lines[lineN].color) {  // check if tiles suit for this pattern line 
+            if((color === lines[lineN].color || !lines[lineN].color) && !filled) {  // check if tiles suit for this pattern line 
 
                 extraTiles = Array(extraTilesQuantity).fill(color)
                 
@@ -149,56 +170,34 @@ const reducer = (state = initialState, action) => {
                         if (tileSpace.color === lineInfo.color) {
                             tileSpace.filled = true
                             playerBoards[0].score += 1
-                            // console.log(playerBoards[0].wall[lineId], lineId);
-                            if (playerBoards[0].wall[lineId][id + 1]?.filled === true) { // вот тут начинается это дерьмо
-                                playerBoards[0].score += 1
-                                if(playerBoards[0].wall[lineId][id + 1 + 1]?.filled === true) {
+                            const countRight = (q) => {
+                                if (playerBoards[0].wall[lineId][id + q]?.filled === true) { // вот тут начинается это дерьмо
                                     playerBoards[0].score += 1
-                                    if(playerBoards[0].wall[lineId][id + 1 + 1 + 1]?.filled === true) {
-                                        playerBoards[0].score += 1
-                                        if(playerBoards[0].wall[lineId][id + 1 + 1 + 1 + 1]?.filled === true) {
-                                            playerBoards[0].score += 1
-                                        }
-                                    }
+                                    countRight(q + 1)
                                 }
                             }
-                            if (playerBoards[0].wall[lineId][id - 1]?.filled === true) {
-                                playerBoards[0].score += 1
-                                if(playerBoards[0].wall[lineId][id - 1 - 1]?.filled === true) {
+                            const countLeft = (q) => {
+                                if (playerBoards[0].wall[lineId][id - q]?.filled === true) { // вот тут начинается это дерьмо
                                     playerBoards[0].score += 1
-                                    if(playerBoards[0].wall[lineId][id - 1 - 1 - 1]?.filled === true) {
-                                        playerBoards[0].score += 1
-                                        if(playerBoards[0].wall[lineId][id - 1 - 1 - 1 + 1]?.filled === true) {
-                                            playerBoards[0].score += 1
-                                        }
-                                    }
+                                    countLeft(q + 1)
                                 }
                             }
-                            
-                            if (playerBoards[0].wall[lineId + 1]?.[id].filled === true) { // вот тут начинается это дерьмо
-                                playerBoards[0].score += 1
-                                if(playerBoards[0].wall[lineId + 2]?.[id].filled === true) {
+                            const countUp = (q) => {
+                                if (playerBoards[0].wall[lineId + q]?.[id].filled === true) { 
                                     playerBoards[0].score += 1
-                                    if(playerBoards[0].wall[lineId + 3]?.[id].filled === true) {
-                                        playerBoards[0].score += 1
-                                        if(playerBoards[0].wall[lineId + 4]?.[id].filled === true) {
-                                            playerBoards[0].score += 1
-                                        }
-                                    }
+                                    countUp(q + 1)
                                 }
                             }
-                            if (playerBoards[0].wall[lineId - 1]?.[id].filled === true) { // вот тут начинается это дерьмо
-                                playerBoards[0].score += 1
-                                if(playerBoards[0].wall[lineId - 2]?.[id].filled === true) {
+                            const countDown = (q) => {
+                                if (playerBoards[0].wall[lineId - q]?.[id].filled === true) { 
                                     playerBoards[0].score += 1
-                                    if(playerBoards[0].wall[lineId - 3]?.[id].filled === true) {
-                                        playerBoards[0].score += 1
-                                        if(playerBoards[0].wall[lineId - 4]?.[id].filled === true) {
-                                            playerBoards[0].score += 1
-                                        }
-                                    }
+                                    countDown(q + 1)
                                 }
                             }
+                            countRight(1)
+                            countLeft(1)
+                            countUp(1)
+                            countDown(1)
                         }
                     }
                     playerBoards[0].patternLines[lineId] = {}
