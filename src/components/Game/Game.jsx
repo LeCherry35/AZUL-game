@@ -1,6 +1,7 @@
 import React from 'react';
 import PlayerBoard from '../PlayerBoard/PlayerBoard';
 import Table from '../Table/Table';
+import s from './Game.module.css'
 
 
 function Game() {
@@ -10,7 +11,11 @@ function Game() {
     <div>
 
       <Table />
-      <PlayerBoard />
+      <div className={s.playerBoards}>
+        <PlayerBoard player={0}/>
+        <PlayerBoard player={1}/>
+      </div>
+      
 
     </div>
   );

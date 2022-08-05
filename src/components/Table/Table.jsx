@@ -25,16 +25,24 @@ function Table() {
         dispatch({type: 'FILL_FACTORY_DISPLAYS'})
     }
 
+    const countRoundPoints = () => {
+        dispatch({type: 'COUNT_ROUND_POINTS'})
+    }
+
     return(
         <div className={s.tableContainer}>
-            <FactoryDisplay tiles={table[1]}/>
-            <FactoryDisplay tiles={table[3]}/>
-            <FactoryDisplay tiles={table[4]}/>
-            <FactoryDisplay tiles={table[2]}/>
-            <FactoryDisplay tiles={table[5]}/>
-            <FactoryDisplay tiles={table[0]} minusOne={minusOne}/>
+            <div className={s.displaysContainer}>
+                <FactoryDisplay tiles={table[1]}/>
+                <FactoryDisplay tiles={table[3]}/>
+                <FactoryDisplay tiles={table[4]}/>
+                <FactoryDisplay tiles={table[2]}/>
+                <FactoryDisplay tiles={table[5]}/>
+                <FactoryDisplay tiles={table[0]} minusOne={minusOne}/>
+
+            </div>
 
             {!roundStarted && <button onClick={fillDisplays}>Раздать</button>}
+            <button onClick={countRoundPoints}>Подсчитать очки за круг</button>
             
             
         </div>

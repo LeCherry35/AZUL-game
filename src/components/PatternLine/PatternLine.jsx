@@ -3,9 +3,11 @@ import s from './PatternLine.module.css'
 import { useDispatch, useSelector } from "react-redux";
 
 const PatternLine = (props) => {
+
+    const player = props.player
     const dispatch = useDispatch()
     const currentColor = useSelector(state => state.pickedTiles[0]?.color)
-    const currentLine = useSelector(state => state.playerBoards[0].patternLines[props.size - 1])
+    const currentLine = useSelector(state => state.playerBoards[player].patternLines[props.size - 1])
     const wall = useSelector(state => state.playerBoards[0].wall)
     
 

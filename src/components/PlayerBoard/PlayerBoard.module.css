@@ -1,6 +1,5 @@
 .container {
     display: flex;
-    /* grid-template-columns: 50% 50%; */
 }
 .tileSpace {
     width: 30px;

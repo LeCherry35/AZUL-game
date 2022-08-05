@@ -45,7 +45,7 @@ const initialState = {
   pickedTiles: [],
   dropTiles: [],
 
-  player: 1,
+  player: 0,
 
   roundStarted: false
 
@@ -77,6 +77,7 @@ const reducer = (state = initialState, action) => {
             }
             const PB = _.cloneDeep(state.playerBoards)
             PB[0].wall = wall
+            PB[1].wall = wall
         return { ...state, playerBoards: PB}
 
         case FILL_FACTORY_DISPLAYS:
@@ -116,14 +117,15 @@ const reducer = (state = initialState, action) => {
         case PLACE_TILES:
             const stateCopy = _.cloneDeep(state)
 
+            const player = state.player
             const {color, display} = state.pickedTiles[0]
             const tilesQuantity = state.pickedTiles.length
             const lineN = action.payload
-            const tilesAlreadyInLine = state.playerBoards[0].patternLines[lineN].tilesQ || 0
+            const tilesAlreadyInLine = state.playerBoards[player].patternLines[lineN].tilesQ || 0
             const lineLength = lineN + 1
             const lineSpace = lineLength - (tilesAlreadyInLine)
             const extraTilesQuantity = tilesQuantity > lineSpace ? (tilesQuantity - lineSpace) : 0
-            const playerBoard = stateCopy.playerBoards[0] 
+            const playerBoard = stateCopy.playerBoards[player] 
             const lines = playerBoard.patternLines
             let extraTiles
             let filled
@@ -160,59 +162,64 @@ const reducer = (state = initialState, action) => {
             playerBoard.floorLine = playerBoard.floorLine.concat(extraTiles)
 
             console.log('поместили фишки');
+            stateCopy.player = (player === 0) ? 1 : 0 // changing player
             return stateCopy
         
         case COUNT_ROUND_POINTS:
             const playerBoards = _.cloneDeep(state.playerBoards)
-            for(let [lineId, lineInfo] of playerBoards[0].patternLines.entries()) {
-                if (lineInfo.full === true) {
-                    for (let [id, tileSpace] of playerBoards[0].wall[lineId].entries()) {
-                        if (tileSpace.color === lineInfo.color) {
-                            tileSpace.filled = true
-                            playerBoards[0].score += 1
-                            const countRight = (q) => {
-                                if (playerBoards[0].wall[lineId][id + q]?.filled === true) { // вот тут начинается это дерьмо
-                                    playerBoards[0].score += 1
-                                    countRight(q + 1)
+            for (let p = 0; p < 2; p++) {
+                for(let [lineId, lineInfo] of playerBoards[p].patternLines.entries()) {
+                    if (lineInfo.full === true) {
+                        for (let [id, tileSpace] of playerBoards[p].wall[lineId].entries()) {
+                            if (tileSpace.color === lineInfo.color) {
+                                tileSpace.filled = true
+                                playerBoards[p].score += 1
+                                const countRight = (q) => {
+                                    if (playerBoards[p].wall[lineId][id + q]?.filled === true) { // вот тут начинается это дерьмо
+                                        playerBoards[p].score += 1
+                                        countRight(q + 1)
+                                    }
                                 }
-                            }
-                            const countLeft = (q) => {
-                                if (playerBoards[0].wall[lineId][id - q]?.filled === true) { // вот тут начинается это дерьмо
-                                    playerBoards[0].score += 1
-                                    countLeft(q + 1)
+                                const countLeft = (q) => {
+                                    if (playerBoards[p].wall[lineId][id - q]?.filled === true) { // вот тут начинается это дерьмо
+                                        playerBoards[p].score += 1
+                                        countLeft(q + 1)
+                                    }
                                 }
-                            }
-                            const countUp = (q) => {
-                                if (playerBoards[0].wall[lineId + q]?.[id].filled === true) { 
-                                    playerBoards[0].score += 1
-                                    countUp(q + 1)
+                                const countUp = (q) => {
+                                    if (playerBoards[p].wall[lineId + q]?.[id].filled === true) { 
+                                        playerBoards[p].score += 1
+                                        countUp(q + 1)
+                                    }
                                 }
-                            }
-                            const countDown = (q) => {
-                                if (playerBoards[0].wall[lineId - q]?.[id].filled === true) { 
-                                    playerBoards[0].score += 1
-                                    countDown(q + 1)
+                                const countDown = (q) => {
+                                    if (playerBoards[p].wall[lineId - q]?.[id].filled === true) { 
+                                        playerBoards[p].score += 1
+                                        countDown(q + 1)
+                                    }
                                 }
+                                countRight(1)
+                                countLeft(1)
+                                countUp(1)
+                                countDown(1)
                             }
-                            countRight(1)
-                            countLeft(1)
-                            countUp(1)
-                            countDown(1)
                         }
+                        playerBoards[p].patternLines[lineId] = {}
                     }
-                    playerBoards[0].patternLines[lineId] = {}
                 }
-            }
-            for (let n of playerBoards[0].floorLine.keys()) {
-                if (n < 2) {
-                    playerBoards[0].score -= 1
-                } else if (n > 1 && n < 5) {
-                    playerBoards[0].score -= 2
-                } else if (n > 4) {
-                    playerBoards[0].score -= 3
+                for (let n of playerBoards[p].floorLine.keys()) {
+                    if (n < 2) {
+                        playerBoards[p].score -= 1
+                    } else if (n > 1 && n < 5) {
+                        playerBoards[p].score -= 2
+                    } else if (n > 4) {
+                        playerBoards[p].score -= 3
+                    }
+                    playerBoards[p].floorLine = []
                 }
-                playerBoards[0].floorLine = []
+                
             }
+            
             return { ...state, playerBoards: playerBoards, roundStarted: false, minusOneIsOnTable: true}
             
       default:
