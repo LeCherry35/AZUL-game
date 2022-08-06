@@ -39,7 +39,7 @@ function PlayerBoard(props) {
                         })}
                     </div>
                 </div>
-                <Wall />
+                <Wall player={player}/>
 
             </div>
             

@@ -8,6 +8,7 @@ const PLACE_TILES = 'PLACE_TILES'
 const DROP_TILES = 'DROP_TILES'
 const CREATE_WALL = 'CREATE_WALL'
 const COUNT_ROUND_POINTS ='COUNT_ROUND_POINTS'
+const SET_PLAYERS = 'SET_PLAYERS'
 
 const initialState = {
   bag: [],
@@ -46,6 +47,7 @@ const initialState = {
   dropTiles: [],
 
   player: 0,
+  players: 2,
 
   roundStarted: false
 
@@ -54,6 +56,9 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case SET_PLAYERS:
+            return { ...state, players: action.payload}
+
         case START_GAME:
             const bag = Array(100)
                 .fill('red', 0, 20)
@@ -65,37 +70,39 @@ const reducer = (state = initialState, action) => {
             console.log('замешали');
             return { ...state, bag: bag}
 
-        case CREATE_WALL:
-            let wall = []
-            const colors = ['blue', 'yellow', 'red', 'black', 'green']
-            for (let i = 0; i < 5; i ++) {
-                wall[i] = []
-                for (let j =0; j < 5; j ++) {
-                    const k = ((j - i) >= 0) ? (j - i) : (j - i + 5)
-                    wall[i].push({color: colors[k], filled: false})
-                }
-            }
+            case CREATE_WALL:
             const PB = _.cloneDeep(state.playerBoards)
-            PB[0].wall = wall
-            PB[1].wall = wall
-        return { ...state, playerBoards: PB}
-
-        case FILL_FACTORY_DISPLAYS:
-            const table = [ ...state.table]
-            for (let i = 1; i <= 5; i++) {
-                const preTable = state.bag.splice(-4)
-                table[i] = preTable.map(color => {
-                    return {
-                        color: color,
-                        display: i
+            for (let p = 0; p < state.players; p++) {
+                let wall = []
+                const colors = ['blue', 'yellow', 'red', 'black', 'green']
+                for (let i = 0; i < 5; i ++) {
+                    wall[i] = []
+                    for (let j =0; j < 5; j ++) {
+                        const k = ((j - i) >= 0) ? (j - i) : (j - i + 5)
+                        wall[i].push({color: colors[k], filled: false})
+                    }
+                }
+                PB[p].wall = wall
+            }
+           
+            return { ...state, playerBoards: PB}
+            
+            case FILL_FACTORY_DISPLAYS:
+                const table = [ ...state.table]
+                for (let i = 1; i <= 5; i++) {
+                    const preTable = state.bag.splice(-4)
+                    table[i] = preTable.map(color => {
+                        return {
+                            color: color,
+                            display: i
                     }
                 })
             } 
             console.log('роздали');
             return { ...state, table: table, roundStarted: true}
 
-        case PICK_TILES:
-            
+            case PICK_TILES:
+                
             const {display: pickedDisplay, color: pickedColor} = action.payload
             const tilesOnDisplay = _.cloneDeep(state.table[pickedDisplay])
 
@@ -116,7 +123,6 @@ const reducer = (state = initialState, action) => {
 
         case PLACE_TILES:
             const stateCopy = _.cloneDeep(state)
-
             const player = state.player
             const {color, display} = state.pickedTiles[0]
             const tilesQuantity = state.pickedTiles.length
@@ -136,7 +142,7 @@ const reducer = (state = initialState, action) => {
             }
             
             if((color === lines[lineN].color || !lines[lineN].color) && !filled) {  // check if tiles suit for this pattern line 
-
+                
                 extraTiles = Array(extraTilesQuantity).fill(color)
                 
                 lines[lineN] = {
@@ -151,7 +157,7 @@ const reducer = (state = initialState, action) => {
             } else {
                 extraTiles = Array(tilesQuantity).fill(color)  
             }
-
+            
             stateCopy.table[display] = [] // update display(or center)
             stateCopy.table[0] = stateCopy.table[0].concat([ ...state.dropTiles])
 
@@ -162,26 +168,28 @@ const reducer = (state = initialState, action) => {
             playerBoard.floorLine = playerBoard.floorLine.concat(extraTiles)
 
             console.log('поместили фишки');
-            stateCopy.player = (player === 0) ? 1 : 0 // changing player
+            stateCopy.player = (player + 1 < stateCopy.players) ? (player + 1) : (player + 1 - stateCopy.players) // changing player
             return stateCopy
         
         case COUNT_ROUND_POINTS:
             const playerBoards = _.cloneDeep(state.playerBoards)
-            for (let p = 0; p < 2; p++) {
+            // debugger
+            
+            for (let p = 0; p < state.players; p++) {
                 for(let [lineId, lineInfo] of playerBoards[p].patternLines.entries()) {
                     if (lineInfo.full === true) {
                         for (let [id, tileSpace] of playerBoards[p].wall[lineId].entries()) {
                             if (tileSpace.color === lineInfo.color) {
-                                tileSpace.filled = true
+                                playerBoards[p].wall[lineId][id].filled = true
                                 playerBoards[p].score += 1
                                 const countRight = (q) => {
-                                    if (playerBoards[p].wall[lineId][id + q]?.filled === true) { // вот тут начинается это дерьмо
+                                    if (playerBoards[p].wall[lineId][id + q]?.filled === true) {
                                         playerBoards[p].score += 1
                                         countRight(q + 1)
                                     }
                                 }
                                 const countLeft = (q) => {
-                                    if (playerBoards[p].wall[lineId][id - q]?.filled === true) { // вот тут начинается это дерьмо
+                                    if (playerBoards[p].wall[lineId][id - q]?.filled === true) {
                                         playerBoards[p].score += 1
                                         countLeft(q + 1)
                                     }

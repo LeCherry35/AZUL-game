@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PlayerBoard from '../PlayerBoard/PlayerBoard';
 import Table from '../Table/Table';
 import s from './Game.module.css'
@@ -6,14 +7,18 @@ import s from './Game.module.css'
 
 function Game() {
 
-  return (
-    
+  const players = Array(useSelector(state => state.players)).fill('p')
+  return ( 
     <div>
-
       <Table />
       <div className={s.playerBoards}>
-        <PlayerBoard player={0}/>
-        <PlayerBoard player={1}/>
+        {players.map((p, id) => {
+          return(
+            <PlayerBoard player={id} key={id}/>
+          )
+        })}
+        
+        
       </div>
       
 

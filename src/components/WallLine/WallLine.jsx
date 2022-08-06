@@ -3,8 +3,10 @@ import s from './WallLine.module.css'
 import { useSelector } from "react-redux";
 
 const WallLine = (props) => {
-
-    const wall = useSelector(state => state.playerBoards[0].wall)
+    // console.log(props.n)
+    const wall = useSelector(state => state.playerBoards[props.player].wall)
+    // const wall = useSelector(state => state.playerBoards)
+    
 
     return (
         <div className={s.container}>

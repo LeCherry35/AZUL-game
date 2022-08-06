@@ -8,6 +8,7 @@ function Table() {
     const table = useSelector(state => state.table)
     const minusOne = useSelector(state => state.minusOneIsOnTable)
     const roundStarted = useSelector(state => state.roundStarted)
+    const player = useSelector(state => state.player) + 1
 
     useEffect(() => {
         startGame()
@@ -40,7 +41,7 @@ function Table() {
                 <FactoryDisplay tiles={table[0]} minusOne={minusOne}/>
 
             </div>
-
+            {roundStarted && <div> Player {player}'s turn</div>}
             {!roundStarted && <button onClick={fillDisplays}>Раздать</button>}
             <button onClick={countRoundPoints}>Подсчитать очки за круг</button>
             
