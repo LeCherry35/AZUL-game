@@ -15,9 +15,14 @@ const initialState = {
 
   playerBoards: [
     {
-        patternLines: [{}, {}, {}, {}, {}],
+        patternLines: [{}, {}, {}, {}, {}],//color: 'green', full: true, tilesQ: 1
         floorLine: [],
         wall:[],
+        // wall:[[{color: 'blue', filled: true}, {color: 'yellow', filled: true}, {color: 'red', filled: true}, {color: 'black', filled: true}, {color: 'green', filled: false}],
+        // [{color: 'green', filled: true}, {color: 'blue', filled: true}, {color: 'yellow', filled: false}, {color: 'red', filled: false}, {color: 'black', filled: false}],
+        // [{color: 'black', filled: true}, {color: 'green', filled: false}, {color: 'blue', filled: true}, {color: 'yellow', filled: false}, {color: 'red', filled: false}],
+        // [{color: 'red', filled: true}, {color: 'black', filled: false}, {color: 'green', filled: false}, {color: 'blue', filled: true}, {color: 'yellow', filled: false}],
+        // [{color: 'yellow', filled: true}, {color: 'red', filled: false}, {color: 'black', filled: false}, {color: 'green', filled: false}, {color: 'blue', filled: true}]],
         score: 0
     },
     {
@@ -49,7 +54,12 @@ const initialState = {
   player: 0,
   players: 2,
 
-  roundStarted: false
+  roundStarted: false,
+  roundEnded: false,
+//   roundEnded: true,
+  roundNum: 0,
+
+  gameEnded: false
 
 }
 
@@ -57,16 +67,32 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_PLAYERS:
-            return { ...state, players: action.payload}
+            let blankTable  
+            switch (action.payload) {
+                case 2: 
+                    blankTable = Array(6).fill([])
+                    break
+                case 3: 
+                    blankTable = Array(8).fill([])
+                    break
+                case 4: 
+                    blankTable = Array(10).fill([])
+                    break
+                default:
+                    console.log('?');
+                
+                    
+            }
+            return { ...state, players: action.payload, table: blankTable}
 
         case START_GAME:
-            const bag = Array(100)
+            let bag = Array(100)
                 .fill('red', 0, 20)
                 .fill('yellow', 20, 40)
                 .fill('green', 40, 60)
                 .fill('blue', 60, 80)
                 .fill('black', 80, 100)
-            bag.sort( () => Math.random() - 0.5 );
+            bag = _.shuffle(bag)
             console.log('замешали');
             return { ...state, bag: bag}
 
@@ -89,24 +115,24 @@ const reducer = (state = initialState, action) => {
             
             case FILL_FACTORY_DISPLAYS:
                 const table = [ ...state.table]
-                for (let i = 1; i <= 5; i++) {
+                for (let i = 1; i < table.length; i++) {
                     const preTable = state.bag.splice(-4)
                     table[i] = preTable.map(color => {
                         return {
                             color: color,
                             display: i
-                    }
-                })
-            } 
-            console.log('роздали');
-            return { ...state, table: table, roundStarted: true}
+                        }
+                    })
+                } 
+            console.log('роздали', table);
+            return { ...state, table: table, roundStarted: true, player: state.roundNum % state.players}
 
             case PICK_TILES:
                 
             const {display: pickedDisplay, color: pickedColor} = action.payload
             const tilesOnDisplay = _.cloneDeep(state.table[pickedDisplay])
 
-            const pickedTiles = tilesOnDisplay.filter(tile => {
+            const pickedTiles = tilesOnDisplay.filter(tile => { 
                 return pickedColor === tile.color
             })
             const dropTiles = tilesOnDisplay.filter(tile => {
@@ -160,20 +186,29 @@ const reducer = (state = initialState, action) => {
             
             stateCopy.table[display] = [] // update display(or center)
             stateCopy.table[0] = stateCopy.table[0].concat([ ...state.dropTiles])
-
+            
             if(display === 0 && state.minusOneIsOnTable) { // handling (-1) tile if it is on table
                 extraTiles = ['minusOne'].concat(extraTiles) 
                 stateCopy.minusOneIsOnTable = false    
             } 
             playerBoard.floorLine = playerBoard.floorLine.concat(extraTiles)
-
+            
             console.log('поместили фишки');
             stateCopy.player = (player + 1 < stateCopy.players) ? (player + 1) : (player + 1 - stateCopy.players) // changing player
+            
+            const theTable = stateCopy.table // if all displays are empty
+            
+            
+            if (theTable.every(display => display.length === 0)) {
+                stateCopy.roundEnded = true
+                stateCopy.roundNum += 1
+            }
             return stateCopy
         
         case COUNT_ROUND_POINTS:
             const playerBoards = _.cloneDeep(state.playerBoards)
-            // debugger
+            let bagRefilled = _.cloneDeep(state.bag) 
+            let gameEnded
             
             for (let p = 0; p < state.players; p++) {
                 for(let [lineId, lineInfo] of playerBoards[p].patternLines.entries()) {
@@ -212,6 +247,8 @@ const reducer = (state = initialState, action) => {
                                 countDown(1)
                             }
                         }
+                        const tilesLeft = Array(lineId).fill(lineInfo.color)
+                        bagRefilled = bagRefilled.concat(tilesLeft)
                         playerBoards[p].patternLines[lineId] = {}
                     }
                 }
@@ -223,12 +260,58 @@ const reducer = (state = initialState, action) => {
                     } else if (n > 4) {
                         playerBoards[p].score -= 3
                     }
+                    // console.log(bagRefilled);
+                    const floorLineTiles = playerBoards[p].floorLine.filter(tile => tile !== "minusOne")
+                    bagRefilled = bagRefilled.concat(floorLineTiles)
                     playerBoards[p].floorLine = []
                 }
+
+                bagRefilled = _.shuffle(bagRefilled)
+                for (let wallLine of playerBoards[p].wall) {
+                    if (wallLine.every(tileSpace => tileSpace.filled)) { //check if game is finished
+                        gameEnded = true
+                    }
+                }
+                if (gameEnded) {
+                    let verticalFilledTiles = [0, 0, 0, 0, 0]
+                    let colorCounter = {blue: 0, yellow: 0, red: 0, black: 0, green: 0}
+
+                    for (let wallLine of playerBoards[p].wall) { 
+                        debugger
+                        if (wallLine.every(tileSpace => tileSpace.filled)) {
+                            playerBoards[p].score += 2
+                        }
+                        for(let i = 0; i < 5; i++) {
+                            if (wallLine[i].filled) {
+                                verticalFilledTiles[i]++
+                                if (verticalFilledTiles[i] === 5) {
+                                    playerBoards[p].score += 7
+                                    console.log(`player ${p + 1} line ${i + 1} filled`);
+                                }
+                            }
+                        }
+                    
+                        
+                        for (let tileSpace of wallLine) {
+                            if (tileSpace.filled === true) {
+                                colorCounter[tileSpace.color]++
+                                if (colorCounter[tileSpace.color] === 5) {
+                                    playerBoards[p].score += 10
+                                    console.log(`player ${p + 1} color ${tileSpace.color} filled`);
+                            }
+                            }
+                            
+                        }
+                            
+                       
+                    }
+                    
+                }
                 
+
             }
             
-            return { ...state, playerBoards: playerBoards, roundStarted: false, minusOneIsOnTable: true}
+            return { ...state, bag: bagRefilled, playerBoards: playerBoards, roundStarted: false, roundEnded: false, minusOneIsOnTable: true, gameEnded: gameEnded}
             
       default:
         

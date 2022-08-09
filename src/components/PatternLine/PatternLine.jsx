@@ -8,7 +8,8 @@ const PatternLine = (props) => {
     const dispatch = useDispatch()
     const currentColor = useSelector(state => state.pickedTiles[0]?.color)
     const currentLine = useSelector(state => state.playerBoards[player].patternLines[props.size - 1])
-    const wall = useSelector(state => state.playerBoards[0].wall)
+    const wall = useSelector(state => state.playerBoards[player].wall)
+    const currentPlayer = useSelector(state => state.player)
     
 
     const line = Array(props.size).fill('')
@@ -25,8 +26,11 @@ const PatternLine = (props) => {
                 filled = tileSpace.filled
             }
         }
-        
+        // debugger
         e.target.style.background = (((currentColor === props.tiles.color && !currentLine.full) || !currentLine.color) && !filled) ? 'lightgreen' : 'lightpink'
+        if (player !== currentPlayer) {
+            e.target.style.background = 'white'
+        }
     }
     const dragLeaveHandler = (e) => {
         e.target.style.background = 'white'
@@ -35,7 +39,12 @@ const PatternLine = (props) => {
     const dropHandler = (e, number) => {
         e.preventDefault()
         e.target.style.background = 'white'
-        dispatch({type: 'PLACE_TILES', payload: number})
+        if (player !== currentPlayer) {
+            dispatch( {type: 'DROP_TILES'})
+        } else {
+            dispatch({type: 'PLACE_TILES', payload: number})
+        }
+        
     }
 
     return (

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Center from "../Center/Center";
 import FactoryDisplay from "../FactoryDisplay/FactoryDIsplay";
 import s from './Table.module.css'
 
@@ -9,6 +10,9 @@ function Table() {
     const minusOne = useSelector(state => state.minusOneIsOnTable)
     const roundStarted = useSelector(state => state.roundStarted)
     const player = useSelector(state => state.player) + 1
+    const roundEnded = useSelector(state => state.roundEnded)
+    const gameEnded = useSelector(state => state.gameEnded)
+
 
     useEffect(() => {
         startGame()
@@ -33,19 +37,25 @@ function Table() {
     return(
         <div className={s.tableContainer}>
             <div className={s.displaysContainer}>
-                <FactoryDisplay tiles={table[1]}/>
-                <FactoryDisplay tiles={table[3]}/>
-                <FactoryDisplay tiles={table[4]}/>
-                <FactoryDisplay tiles={table[2]}/>
-                <FactoryDisplay tiles={table[5]}/>
-                <FactoryDisplay tiles={table[0]} minusOne={minusOne}/>
-
+                {table.map((_, n) => {
+                    if (n !== 0) {
+                        return (
+                            <FactoryDisplay tiles={table[n]} key={n}/>
+                        )
+                    } 
+                })}
+                
+                
             </div>
-            {roundStarted && <div> Player {player}'s turn</div>}
-            {!roundStarted && <button onClick={fillDisplays}>Раздать</button>}
-            <button onClick={countRoundPoints}>Подсчитать очки за круг</button>
-            
-            
+            <Center  tiles={table[0]} minusOne={minusOne}/>
+            <div className={s.info}>
+
+                {!gameEnded && roundStarted && !roundEnded && <div> Player {player}'s turn</div>}
+                {!gameEnded && !roundStarted && <button onClick={fillDisplays}>Раздать</button>}
+                {!gameEnded && roundEnded && <button onClick={countRoundPoints}>Подсчитать очки за круг</button>}
+                {/* {gameEnded && } */}
+                
+            </div>
         </div>
     )
 }

@@ -1,12 +1,8 @@
-.factoryDisplay {
+.center {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 10px;
-    background-color: antiquewhite;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+    height: 42px;
     padding: 20px;
 
     

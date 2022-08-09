@@ -15,8 +15,8 @@ function PlayerBoard(props) {
     
     
     return (
-        <div >
-            <div>player {player + 1} | score: {score}</div>
+        <div className={s.playerBoard}>
+            <div className={s.playerInfo}>player {player + 1} | score: {score}</div>
             <div className={s.container}>
                 <div>
                     <div>
@@ -26,20 +26,20 @@ function PlayerBoard(props) {
                             )
                         })}
                     </div>
-                    <div className={s.floorLineContainer}>
-                        {floorLine.map((tile, id) => {
-                            if (tile === 'minusOne') {
-                            return (
-                                <div className={s.tileSpace} key={id}> -1 </div>
-                            )
-                        }
-                            return (
-                                <div className={s.floorTile} style ={{background: tile}} key={id}></div>
-                            )
-                        })}
-                    </div>
                 </div>
                 <Wall player={player}/>
+                <div className={s.floorLineContainer}>
+                    {floorLine.map((tile, id) => {
+                        if (tile === 'minusOne') {
+                        return (
+                            <div className={s.tileSpace} key={id}> -1 </div>
+                        )
+                    }
+                        return (
+                            <div className={s.floorTile} style ={{background: tile}} key={id}></div>
+                        )
+                    })}
+                </div>
 
             </div>
             

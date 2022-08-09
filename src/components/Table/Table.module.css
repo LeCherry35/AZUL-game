@@ -1,3 +1,10 @@
 .displaysContainer {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.info {
+    width: 300px;
+    height: 50px;
+    margin: 0 auto;
 }

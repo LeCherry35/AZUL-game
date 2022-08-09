@@ -3,7 +3,7 @@ import WallLine from "../WallLine/WallLine";
 import s from './Wall.module.css'
 
 const Wall = (props) => {
-    console.log(props);
+    
     
     return (
         <div className={s.container}>

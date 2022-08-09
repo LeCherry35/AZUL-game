@@ -1,5 +1,18 @@
+.playerBoard {
+    box-shadow: 5px 5px 5px rgb(78, 78, 78);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid black;
+    max-width: 430px;
+}
 .container {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.playerInfo {
+    padding: 10px;
 }
 .tileSpace {
     width: 30px;
@@ -10,6 +23,8 @@
 .floorLineContainer {
     display: flex;
     background-color: antiquewhite;
+    height: 40px;
+    width: 410px;
 }
 .floorTile {
     width: 30px;
