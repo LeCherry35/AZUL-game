@@ -8,6 +8,9 @@
     margin: 5px;
     border: 1px solid silver;
     pointer-events: none;
+    box-shadow: 2px 2px 5px rgb(78, 78, 78) inset;
+    border-radius: 2px;
+    background-color: aliceblue;
     
 }
 .empty {

@@ -32,7 +32,7 @@ function PlayerBoard(props) {
                     {floorLine.map((tile, id) => {
                         if (tile === 'minusOne') {
                         return (
-                            <div className={s.tileSpace} key={id}> -1 </div>
+                            <div className={s.minusOne} key={id}> -1 </div>
                         )
                     }
                         return (

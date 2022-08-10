@@ -56,7 +56,7 @@ const PatternLine = (props) => {
             {line.map((tile,id) => {
                 if(tile) {
                     return(
-                        <div className={s.tile} style ={{background: tile}} key={id}></div>
+                        <div className={s.tile} style ={{background: tile, boxShadow: 'none'}} key={id}></div>
                     )
                 }
                 return(

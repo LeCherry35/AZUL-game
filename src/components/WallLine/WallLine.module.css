@@ -2,9 +2,10 @@
     display: flex;
 }
 .tileSpace {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     margin: 5px;
     opacity: 50%;
-    border: 1px solid white;
+    border-radius: 2px;
+    box-shadow: 2px 2px 5px rgb(78, 78, 78) inset;
 }

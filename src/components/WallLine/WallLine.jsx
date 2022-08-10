@@ -12,7 +12,7 @@ const WallLine = (props) => {
                 wall[props.n].map((tileSpace,id) => {
                     
                 return (
-                    <div className={s.tileSpace} style={{background: tileSpace.color, opacity: tileSpace.filled ? '100%' : '20%'}} key={id}></div>
+                    <div className={s.tileSpace} style={{background: tileSpace.color, opacity: tileSpace.filled ? '100%' : '20%', boxShadow: tileSpace.filled ? 'none' : '2px 2px 5px black inset'}} key={id}></div>
                 )
             }) :
             <></>

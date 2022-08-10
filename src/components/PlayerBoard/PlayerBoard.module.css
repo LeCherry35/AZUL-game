@@ -2,8 +2,8 @@
     box-shadow: 5px 5px 5px rgb(78, 78, 78);
     margin: 10px;
     padding: 10px;
-    border-radius: 4px;
-    border: 1px solid black;
+    border-radius: 20px;
+    background-color: white;
     max-width: 430px;
 }
 .container {
@@ -14,21 +14,25 @@
 .playerInfo {
     padding: 10px;
 }
-.tileSpace {
-    width: 30px;
-    height: 30px;
-    margin: 5px;
-    border: 1px solid silver;
-}
 .floorLineContainer {
     display: flex;
     background-color: antiquewhite;
     height: 40px;
     width: 410px;
+    border-radius: 10px;
 }
 .floorTile {
     width: 30px;
     height: 30px;
     margin: 5px;
-    border: 1px solid silver;
+    box-shadow: 2px 2px 5px rgb(78, 78, 78);
+    border-radius: 2px;
+}
+.minusOne {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    background-color: white;
+    box-shadow: 2px 2px 5px rgb(78, 78, 78);
+    border-radius: 2px;
 }
