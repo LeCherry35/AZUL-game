@@ -51,8 +51,8 @@ function Table() {
             <div className={s.info}>
 
                 {!gameEnded && roundStarted && !roundEnded && <div> Player {player}'s turn</div>}
-                {!gameEnded && !roundStarted && <button onClick={fillDisplays}>Раздать</button>}
-                {!gameEnded && roundEnded && <button onClick={countRoundPoints}>Подсчитать очки за круг</button>}
+                {!gameEnded && !roundStarted && <button onClick={fillDisplays}>Draw tiles</button>}
+                {!gameEnded && roundEnded && <button onClick={countRoundPoints}>Count points</button>}
                 {/* {gameEnded && } */}
                 
             </div>

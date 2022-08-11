@@ -9,8 +9,24 @@
     border-radius: 50%;
     padding: 20px;
     box-shadow: 5px 5px 5px rgb(78, 78, 78);
+    position: relative;
+    top: 0px;
+    left: 0px;
+    transition: all 0.5s;
 
     
+}
+.filled {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    transition: all 0.5s;
+}
+.filled:hover {
+    top: -5px;
+    left: -5px;
+    box-shadow: 10px 10px 10px rgb(78, 78, 78);
+
 }
 
 .tile {
@@ -20,5 +36,13 @@
     /* border: 1px solid silver; */
     box-shadow: 2px 2px 5px rgb(78, 78, 78);
     border-radius: 2px;
-    
+    position: relative;
+    top: 0px;
+    left: 0px;
+    transition: all 0.5s;
+}
+.tile:hover {
+    top: -2px;
+    left: -2px;
+    box-shadow: 7px 7px 7px rgb(78, 78, 78);
 }

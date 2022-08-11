@@ -1,0 +1,16 @@
+.container {
+    margin-top: 200px;
+}
+a {
+    font-weight: 900;
+    font-size: 68px;
+    text-decoration: none;
+    color: black;
+}
+a:hover {
+    font-size: 72;
+    color: red;
+} 
+.radio {
+    font-size: 32px;
+}

@@ -200,6 +200,7 @@ const reducer = (state = initialState, action) => {
             
             
             if (theTable.every(display => display.length === 0)) {
+                stateCopy.player = null
                 stateCopy.roundEnded = true
                 stateCopy.roundNum += 1
             }

@@ -15,5 +15,14 @@
     box-shadow: 2px 2px 5px rgb(78, 78, 78);
     border-radius: 2px;
     background: white;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    transition: all 0.5s;
     
+}
+.tile:hover {
+    top: -2px;
+    left: -2px;
+    box-shadow: 7px 7px 7px rgb(78, 78, 78);
 }

@@ -13,21 +13,21 @@ const GameMenu = () => {
 
 
     return (
-        <div>
+        <div className={s.container}>
             <NavLink to="/game" >Start game</NavLink>
                 <div className={s.radio}>
                     <input type="radio" name="position" value={2} onChange={(e) => {setPlayers(e)}} />
-                    <label>2</label>
+                    <label>2 players</label>
 
                 </div>
                 <div className={s.radio}>
                     <input type="radio" name="position" value={3} onChange={(e) => {setPlayers(e)}} />
-                    <label>3</label>
+                    <label>3 players</label>
 
                 </div>
                 <div className={s.radio}>
                     <input type="radio" name="position" value={4} onChange={(e) => {setPlayers(e)}} />
-                    <label>4</label>
+                    <label>4 players</label>
 
                 </div>
         </div>

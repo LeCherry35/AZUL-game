@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 function FactoryDisplay(props) {
     
     const dispatch = useDispatch()
+    const displayClassName = (props.tiles.length === 0) ? s.factoryDisplay : s.factoryDisplay + ' ' + s.filled
 
     const dragStartHandler = (e,tile) => {
         dispatch({type: 'PICK_TILES', payload: tile})
@@ -14,7 +15,7 @@ function FactoryDisplay(props) {
     }
 
     return (
-        <div className={s.factoryDisplay}>
+        <div className={displayClassName}>
             {props.minusOne &&  <div className={s.tile}> -1 </div>}
             {props.tiles.map((tile, key) => {
                 
