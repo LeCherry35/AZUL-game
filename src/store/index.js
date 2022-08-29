@@ -8,7 +8,9 @@ const PLACE_TILES = 'PLACE_TILES'
 const DROP_TILES = 'DROP_TILES'
 const CREATE_WALL = 'CREATE_WALL'
 const COUNT_ROUND_POINTS ='COUNT_ROUND_POINTS'
-const SET_PLAYERS = 'SET_PLAYERS'
+const SET_PLAYER = 'SET_PLAYER'
+const ADD_PLAYER = 'ADD_PLAYER'
+const REMOVE_PLAYER = 'REMOVE_PLAYER'
 
 const initialState = {
   bag: [],
@@ -53,6 +55,7 @@ const initialState = {
 
   player: 0,
   players: 2,
+  playersNames: [],
 
   roundStarted: false,
   roundEnded: false,
@@ -66,9 +69,20 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_PLAYERS:
+        case ADD_PLAYER:
+            return {...state, players: ++state.players}
+
+        case REMOVE_PLAYER:
+            return {...state, players: --state.players}
+        case SET_PLAYER:
+            const playersNames = _.cloneDeep(state.playersNames)
+            const {name, playerNo} = action.payload
+            playersNames[playerNo] = name
+            return { ...state, playersNames: playersNames}
+
+        case START_GAME:
             let blankTable  
-            switch (action.payload) {
+            switch (state.players) {
                 case 2: 
                     blankTable = Array(6).fill([])
                     break
@@ -80,21 +94,15 @@ const reducer = (state = initialState, action) => {
                     break
                 default:
                     console.log('?');
-                
-                    
             }
-            return { ...state, players: action.payload, table: blankTable}
-
-        case START_GAME:
-            let bag = Array(100)
+            let bag = Array(100) //fill the bag
                 .fill('red', 0, 20)
                 .fill('yellow', 20, 40)
                 .fill('green', 40, 60)
                 .fill('blue', 60, 80)
                 .fill('black', 80, 100)
             bag = _.shuffle(bag)
-            console.log('замешали');
-            return { ...state, bag: bag}
+            return { ...state, bag: bag, table: blankTable, roundStarted: false}
 
             case CREATE_WALL:
             const PB = _.cloneDeep(state.playerBoards)
@@ -124,7 +132,6 @@ const reducer = (state = initialState, action) => {
                         }
                     })
                 } 
-            console.log('роздали', table);
             return { ...state, table: table, roundStarted: true, player: state.roundNum % state.players}
 
             case PICK_TILES:
@@ -141,7 +148,6 @@ const reducer = (state = initialState, action) => {
             dropTiles.forEach(tile => {
                 tile.display = 0
             })
-            console.log('взяли фишки')
             return { ...state, pickedTiles: pickedTiles, dropTiles: dropTiles} 
             
         case DROP_TILES :
@@ -193,7 +199,6 @@ const reducer = (state = initialState, action) => {
             } 
             playerBoard.floorLine = playerBoard.floorLine.concat(extraTiles)
             
-            console.log('поместили фишки');
             stateCopy.player = (player + 1 < stateCopy.players) ? (player + 1) : (player + 1 - stateCopy.players) // changing player
             
             const theTable = stateCopy.table // if all displays are empty

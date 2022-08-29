@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PatternLine from "../PatternLine/PatternLine";
 import Wall from "../Wall/Wall";
@@ -6,29 +6,30 @@ import s from './PlayerBoard.module.css'
 
 function PlayerBoard(props) {
 
-    const player = props.player
-    const currentPlayer = useSelector(state => state.player)
-    const patternLines = useSelector(state => state.playerBoards[player].patternLines)
-    const floorLine = useSelector(state => state.playerBoards[player].floorLine)
-    const score = useSelector(state => state.playerBoards[player].score)
+    const playerId = props.player
+    const currentPlayerId = useSelector(state => state.player)
+    const patternLines = useSelector(state => state.playerBoards[playerId].patternLines)
+    const floorLine = useSelector(state => state.playerBoards[playerId].floorLine)
+    const score = useSelector(state => state.playerBoards[playerId].score)
     const dispatch = useDispatch()
-    const playerBoardClass = (player === currentPlayer) ? (s.playerBoard + ' ' + s.active) : (s.playerBoard)
+    const player = useSelector(state => state.playersNames[playerId])
+    const playerBoardClass = (playerId === currentPlayerId) ? (s.playerBoard + ' ' + s.active) : (s.playerBoard)
     
     
     return (
         <div className={playerBoardClass}>
-            <div className={s.playerInfo}>player {player + 1} | score: {score}</div>
+            <div className={s.playerInfo}>{player || 'player' + (playerId + 1)} <br></br> score: {score}</div>
             <div className={s.container}>
                 <div>
                     <div>
                         {patternLines.map((line,id) => {
                             return (
-                                <PatternLine size={id + 1} tiles={line} key={id} player={player}/>
+                                <PatternLine size={id + 1} tiles={line} key={id} player={playerId}/>
                             )
                         })}
                     </div>
                 </div>
-                <Wall player={player}/>
+                <Wall player={playerId}/>
                 <div className={s.floorLineContainer}>
                     {floorLine.map((tile, id) => {
                         if (tile === 'minusOne') {

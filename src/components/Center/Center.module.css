@@ -2,15 +2,15 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    height: 42px;
-    padding: 20px;
+    min-height: 42px;
+    padding-top: 10px;
 
     
 }
 
 .tile {
     width: 30px;
-    height: 30px;
+    min-height: 30px;
     margin: 5px;
     box-shadow: 2px 2px 5px rgb(78, 78, 78);
     border-radius: 2px;
@@ -24,5 +24,5 @@
 .tile:hover {
     top: -2px;
     left: -2px;
-    box-shadow: 7px 7px 7px rgb(78, 78, 78);
+    box-shadow: 4px 4px 7px rgb(78, 78, 78);
 }

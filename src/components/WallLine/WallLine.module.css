@@ -4,7 +4,7 @@
 .tileSpace {
     width: 32px;
     height: 32px;
-    margin: 5px;
+    margin: 3px;
     opacity: 50%;
     border-radius: 2px;
     box-shadow: 2px 2px 5px rgb(78, 78, 78) inset;

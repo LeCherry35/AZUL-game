@@ -6,11 +6,25 @@ a {
     font-size: 68px;
     text-decoration: none;
     color: black;
+    line-height: 68px;
+    transition: all 0.5s;
 }
 a:hover {
-    font-size: 72;
+    font-size: 72px;
     color: red;
+    line-height: 68px;
 } 
-.radio {
+a:active {
+    font-size: 64px;
+    line-height: 68px;
+}
+/* .radio {
     font-size: 32px;
 }
+.radio:hover {
+    color: red;
+} */
+.players {
+    font-size: 32px;
+}
+

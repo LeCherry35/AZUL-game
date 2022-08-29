@@ -1,0 +1,19 @@
+.container {
+    padding: 5px;
+}
+    
+    
+input {
+    font-family: inherit;
+    display: inline-block;
+    width: 380px;
+    height: 54px;
+    margin: o auto;
+    border: 1px solid #D0CFCF;
+    background: none;
+    border-radius: 4px;
+    padding-left: 16px;
+    text-align: center;
+    font-size: 32px;
+}
+        

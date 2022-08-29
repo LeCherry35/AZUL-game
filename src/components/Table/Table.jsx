@@ -9,7 +9,8 @@ function Table() {
     const table = useSelector(state => state.table)
     const minusOne = useSelector(state => state.minusOneIsOnTable)
     const roundStarted = useSelector(state => state.roundStarted)
-    const player = useSelector(state => state.player) + 1
+    const playerId = useSelector(state => state.player)
+    const playerName = useSelector(state => state.playersNames[playerId])
     const roundEnded = useSelector(state => state.roundEnded)
     const gameEnded = useSelector(state => state.gameEnded)
 
@@ -50,7 +51,7 @@ function Table() {
             <Center  tiles={table[0]} minusOne={minusOne}/>
             <div className={s.info}>
 
-                {!gameEnded && roundStarted && !roundEnded && <div> Player {player}'s turn</div>}
+                {!gameEnded && roundStarted && !roundEnded && <div> {playerName || ('Player ' + (playerId + 1))}'s turn</div>}
                 {!gameEnded && !roundStarted && <button onClick={fillDisplays}>Draw tiles</button>}
                 {!gameEnded && roundEnded && <button onClick={countRoundPoints}>Count points</button>}
                 {/* {gameEnded && } */}
