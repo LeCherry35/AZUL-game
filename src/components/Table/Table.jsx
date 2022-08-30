@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Center from "../Center/Center";
 import FactoryDisplay from "../FactoryDisplay/FactoryDIsplay";
 import s from './Table.module.css'
+import {
+    NavLink
+  } from "react-router-dom";
 
 function Table() {
     const dispatch = useDispatch();
@@ -18,7 +21,13 @@ function Table() {
     useEffect(() => {
         startGame()
         createWall()
+        if (sessionStorage.getItem('state')) restoreState()
+        
     },[])
+    
+    const restoreState = () => {
+        dispatch({type: 'RESTORE_STATE'})
+    }
     
     const createWall = () => {
         dispatch({type: 'CREATE_WALL'})
@@ -51,10 +60,10 @@ function Table() {
             <Center  tiles={table[0]} minusOne={minusOne}/>
             <div className={s.info}>
 
-                {!gameEnded && roundStarted && !roundEnded && <div> {playerName || ('Player ' + (playerId + 1))}'s turn</div>}
+                {!gameEnded && roundStarted && !roundEnded && <div>{playerName || ('Player ' + (playerId + 1))}'s turn</div>}
                 {!gameEnded && !roundStarted && <button onClick={fillDisplays}>Draw tiles</button>}
                 {!gameEnded && roundEnded && <button onClick={countRoundPoints}>Count points</button>}
-                {/* {gameEnded && } */}
+                {gameEnded && <div> game over</div>}
                 
             </div>
         </div>

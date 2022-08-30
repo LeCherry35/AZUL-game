@@ -11,6 +11,8 @@ const COUNT_ROUND_POINTS ='COUNT_ROUND_POINTS'
 const SET_PLAYER = 'SET_PLAYER'
 const ADD_PLAYER = 'ADD_PLAYER'
 const REMOVE_PLAYER = 'REMOVE_PLAYER'
+const RESTORE_STATE ='RESTORE_STATE'
+const RESTART = 'RESTART'
 
 const initialState = {
   bag: [],
@@ -209,6 +211,11 @@ const reducer = (state = initialState, action) => {
                 stateCopy.roundEnded = true
                 stateCopy.roundNum += 1
             }
+
+            sessionStorage.setItem('state', JSON.stringify(stateCopy))
+            // const lastState = sessionStorage.getItem('state')
+            // console.log(lastState);
+
             return stateCopy
         
         case COUNT_ROUND_POINTS:
@@ -283,7 +290,6 @@ const reducer = (state = initialState, action) => {
                     let colorCounter = {blue: 0, yellow: 0, red: 0, black: 0, green: 0}
 
                     for (let wallLine of playerBoards[p].wall) { 
-                        debugger
                         if (wallLine.every(tileSpace => tileSpace.filled)) {
                             playerBoards[p].score += 2
                         }
@@ -311,17 +317,25 @@ const reducer = (state = initialState, action) => {
                             
                        
                     }
-                    
+                    const w = playerBoards.map((pB) => pB.score)
+                    console.log(w);
+
                 }
                 
 
             }
             
             return { ...state, bag: bagRefilled, playerBoards: playerBoards, roundStarted: false, roundEnded: false, minusOneIsOnTable: true, gameEnded: gameEnded}
-            
-      default:
         
-        return state
+        case RESTORE_STATE: 
+            const lastState = JSON.parse(sessionStorage.getItem('state'))
+            return lastState
+
+        case RESTART:
+            sessionStorage.clear()
+            return initialState
+        default:
+            return state
     }
 }
 const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())

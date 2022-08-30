@@ -1,13 +1,20 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PlayerBoard from '../PlayerBoard/PlayerBoard';
 import Table from '../Table/Table';
 import s from './Game.module.css'
+import { NavLink } from "react-router-dom";
 
 
 function Game() {
 
+  const dispatch = useDispatch();
+
   const players = Array(useSelector(state => state.players)).fill('p')
+
+  const restart = () => {
+    dispatch({type: 'RESTART'})
+  }
   return ( 
     <div>
       <Table />
@@ -20,7 +27,7 @@ function Game() {
         
         
       </div>
-      
+      <NavLink to="/" onClick={restart}><button  >restart</button></NavLink>
 
     </div>
   );
