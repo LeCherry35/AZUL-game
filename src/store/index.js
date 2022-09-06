@@ -64,7 +64,8 @@ const initialState = {
 //   roundEnded: true,
   roundNum: 0,
 
-  gameEnded: false
+  gameEnded: false,
+  gameEndedInfo: '',
 
 }
 
@@ -222,6 +223,7 @@ const reducer = (state = initialState, action) => {
             const playerBoards = _.cloneDeep(state.playerBoards)
             let bagRefilled = _.cloneDeep(state.bag) 
             let gameEnded
+            let gameEndedInfo = ''
             
             for (let p = 0; p < state.players; p++) {
                 for(let [lineId, lineInfo] of playerBoards[p].patternLines.entries()) {
@@ -273,7 +275,6 @@ const reducer = (state = initialState, action) => {
                     } else if (n > 4) {
                         playerBoards[p].score -= 3
                     }
-                    // console.log(bagRefilled);
                     const floorLineTiles = playerBoards[p].floorLine.filter(tile => tile !== "minusOne")
                     bagRefilled = bagRefilled.concat(floorLineTiles)
                     playerBoards[p].floorLine = []
@@ -313,19 +314,30 @@ const reducer = (state = initialState, action) => {
                             }
                             }
                             
-                        }
-                            
-                       
+                        } 
                     }
-                    const w = playerBoards.map((pB) => pB.score)
-                    console.log(w);
-
                 }
                 
 
             }
+            if (gameEnded) {
+                const scores = playerBoards.map(pB => pB.score)
+                const winArr = scores.reduce((prev, curr, id) => {
+                    if (prev.score === curr) {
+                        return {id: [ ...prev.id, id], score: prev.score}
+                    } else if (prev.score < curr) {
+                        return {id: [id], score: curr}
+                    } else return prev
+
+                }, {id: [], score: (-Infinity)})
+                if (winArr.length === 1) {
+                    gameEndedInfo = state.playersNames[winArr.id[0]] + ' won!'
+                } else {
+                    gameEndedInfo = state.playersNames[winArr.id[0]] + ' and ' + state.playersNames[winArr.id[1]] + ' have equal maximum points!' 
+                }
+            }
             
-            return { ...state, bag: bagRefilled, playerBoards: playerBoards, roundStarted: false, roundEnded: false, minusOneIsOnTable: true, gameEnded: gameEnded}
+            return { ...state, bag: bagRefilled, playerBoards: playerBoards, roundStarted: false, roundEnded: false, minusOneIsOnTable: true, gameEnded: gameEnded, gameEndedInfo: gameEndedInfo}
         
         case RESTORE_STATE: 
             const lastState = JSON.parse(sessionStorage.getItem('state'))

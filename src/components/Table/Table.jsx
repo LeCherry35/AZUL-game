@@ -3,10 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Center from "../Center/Center";
 import FactoryDisplay from "../FactoryDisplay/FactoryDIsplay";
 import s from './Table.module.css'
-import {
-    NavLink
-  } from "react-router-dom";
-
 function Table() {
     const dispatch = useDispatch();
     const table = useSelector(state => state.table)
@@ -16,6 +12,7 @@ function Table() {
     const playerName = useSelector(state => state.playersNames[playerId])
     const roundEnded = useSelector(state => state.roundEnded)
     const gameEnded = useSelector(state => state.gameEnded)
+    const gameEndedInfo = useSelector(state => state.gameEndedInfo)
 
 
     useEffect(() => {
@@ -63,7 +60,7 @@ function Table() {
                 {!gameEnded && roundStarted && !roundEnded && <div>{playerName || ('Player ' + (playerId + 1))}'s turn</div>}
                 {!gameEnded && !roundStarted && <button onClick={fillDisplays}>Draw tiles</button>}
                 {!gameEnded && roundEnded && <button onClick={countRoundPoints}>Count points</button>}
-                {gameEnded && <div> game over</div>}
+                {gameEnded && <div>{gameEndedInfo}</div>}
                 
             </div>
         </div>
