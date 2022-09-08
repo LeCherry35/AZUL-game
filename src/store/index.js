@@ -140,7 +140,8 @@ const reducer = (state = initialState, action) => {
             case PICK_TILES:
                 
             const {display: pickedDisplay, color: pickedColor} = action.payload
-            const tilesOnDisplay = _.cloneDeep(state.table[pickedDisplay])
+            const pickedTable = _.cloneDeep(state.table)
+            const tilesOnDisplay = pickedTable[pickedDisplay]
 
             const pickedTiles = tilesOnDisplay.filter(tile => { 
                 return pickedColor === tile.color
@@ -151,6 +152,8 @@ const reducer = (state = initialState, action) => {
             dropTiles.forEach(tile => {
                 tile.display = 0
             })
+            pickedTable[pickedDisplay] = dropTiles
+            
             return { ...state, pickedTiles: pickedTiles, dropTiles: dropTiles} 
             
         case DROP_TILES :
