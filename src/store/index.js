@@ -296,13 +296,14 @@ const reducer = (state = initialState, action) => {
                     for (let wallLine of playerBoards[p].wall) { 
                         if (wallLine.every(tileSpace => tileSpace.filled)) {
                             playerBoards[p].score += 2
+                            console.log(`player ${p + 1} line filled`)
                         }
                         for(let i = 0; i < 5; i++) {
                             if (wallLine[i].filled) {
                                 verticalFilledTiles[i]++
                                 if (verticalFilledTiles[i] === 5) {
                                     playerBoards[p].score += 7
-                                    console.log(`player ${p + 1} line ${i + 1} filled`);
+                                    console.log(`player ${p + 1} column ${i + 1} filled`);
                                 }
                             }
                         }
@@ -331,10 +332,11 @@ const reducer = (state = initialState, action) => {
                     } else if (prev.score < curr) {
                         return {id: [id], score: curr}
                     } else return prev
-
+                    
                 }, {id: [], score: (-Infinity)})
-                if (winArr.length === 1) {
-                    gameEndedInfo = state.playersNames[winArr.id[0]] + ' won!'
+                console.log(state.playersNames);
+                if (winArr.id.length === 1) {
+                    gameEndedInfo = state.playersNames[winArr.id[0]] || 'player ' + (winArr.id[0] + 1) + ' won!'
                 } else {
                     gameEndedInfo = state.playersNames[winArr.id[0]] + ' and ' + state.playersNames[winArr.id[1]] + ' have equal maximum points!' 
                 }

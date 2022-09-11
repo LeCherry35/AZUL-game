@@ -1,5 +1,5 @@
 .container {
-    margin-top: 200px;
+    margin-top: 130px;
 }
 a {
     font-weight: 900;
@@ -18,12 +18,6 @@ a:active {
     font-size: 64px;
     line-height: 68px;
 }
-/* .radio {
-    font-size: 32px;
-}
-.radio:hover {
-    color: red;
-} */
 .players {
     font-size: 32px;
 }

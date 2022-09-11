@@ -5,11 +5,11 @@
     justify-content: center;
 }
 .info {
-    width: 300px;
     height: 40px;
     margin: 10px auto;
     font-size: 24px;
     font-weight: 500;
+    white-space: nowrap;
 }
 button {
     font-size: 24px;
