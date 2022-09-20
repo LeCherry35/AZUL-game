@@ -1,24 +1,41 @@
 .container {
-    margin-top: 130px;
+    margin-top: 80px;
+}
+.heading {
+    font-weight: 900;
+    font-size: 100px;
 }
 a {
-    font-weight: 900;
-    font-size: 68px;
+    font-weight: 500;
+    font-size: 32px;
     text-decoration: none;
     color: black;
-    line-height: 68px;
+    line-height: 42px;
     transition: all 0.5s;
 }
+.ready {
+    animation: 1s infinite alternate blink;
+}
 a:hover {
-    font-size: 72px;
-    color: red;
-    line-height: 68px;
+    font-size: 42px;
+    color: red !important;
+    line-height: 42px;
 } 
 a:active {
-    font-size: 64px;
-    line-height: 68px;
+
+    font-size: 36px;
+    line-height: 42px;
 }
 .players {
     font-size: 32px;
+}
+
+@keyframes blink {
+    from {
+        color:black;
+    }
+    to {
+        color: red;
+    }
 }
 

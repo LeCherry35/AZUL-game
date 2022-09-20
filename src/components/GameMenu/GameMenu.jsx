@@ -9,6 +9,8 @@ const GameMenu = () => {
     const dispatch = useDispatch()
     const players = useSelector(state => state.players)
     const playersNames = useSelector(state => state.playersNames)
+    const ready = playersNames.length === players && !(playersNames.includes('') || playersNames.includes(null)) ? true : false
+    console.log(ready)
 
     const setPlayers = (e, playerN) => {
         dispatch({type: 'SET_PLAYER', payload: {name: e.target.value, playerNo:playerN}})
@@ -23,8 +25,9 @@ const GameMenu = () => {
 
     return (
         <div className={s.container}>
-            <NavLink to="/game" >Start game</NavLink>
-                <div className={s.players}>{players} Players:</div>
+            <div className={s.heading}> Azul </div>
+            <NavLink to="/game" className={ready ? s.ready : ''}>Start game</NavLink>
+            <div className={s.players}>{players} Players:</div>
             <Input name='Player 1' value ={playersNames[0]}onChange={(e) => {setPlayers(e, 0)}} />
             <Input name='Player 2' value ={playersNames[1]}onChange={(e) => {setPlayers(e, 1)}} />
             {(players === 3 || players === 4) && <Input name='Player 3' value ={playersNames[3]}onChange={(e) => {setPlayers(e, 2)}} />}

@@ -107,55 +107,55 @@ const reducer = (state = initialState, action) => {
             bag = _.shuffle(bag)
             return { ...state, bag: bag, table: blankTable, roundStarted: false}
 
-            case CREATE_WALL:
-            const PB = _.cloneDeep(state.playerBoards)
-            for (let p = 0; p < state.players; p++) {
-                let wall = []
-                const colors = ['blue', 'yellow', 'red', 'black', 'green']
-                for (let i = 0; i < 5; i ++) {
-                    wall[i] = []
-                    for (let j =0; j < 5; j ++) {
-                        const k = ((j - i) >= 0) ? (j - i) : (j - i + 5)
-                        wall[i].push({color: colors[k], filled: false})
-                    }
+        case CREATE_WALL:
+        const PB = _.cloneDeep(state.playerBoards)
+        for (let p = 0; p < state.players; p++) {
+            let wall = []
+            const colors = ['blue', 'yellow', 'red', 'black', 'green']
+            for (let i = 0; i < 5; i ++) {
+                wall[i] = []
+                for (let j =0; j < 5; j ++) {
+                    const k = ((j - i) >= 0) ? (j - i) : (j - i + 5)
+                    wall[i].push({color: colors[k], filled: false})
                 }
-                PB[p].wall = wall
             }
-           
-            return { ...state, playerBoards: PB}
-            
-            case FILL_FACTORY_DISPLAYS:
-                const table = [ ...state.table]
-                for (let i = 1; i < table.length; i++) {
-                    const preTable = state.bag.splice(-4)
-                    table[i] = preTable.map(color => {
-                        return {
-                            color: color,
-                            display: i
-                        }
-                    })
-                } 
-            return { ...state, table: table, roundStarted: true, player: state.roundNum % state.players}
+            PB[p].wall = wall
+        }
+        
+        return { ...state, playerBoards: PB}
+        
+        case FILL_FACTORY_DISPLAYS:
+            const table = [ ...state.table]
+            for (let i = 1; i < table.length; i++) {
+                const preTable = state.bag.splice(-4)
+                table[i] = preTable.map(color => {
+                    return {
+                        color: color,
+                        display: i
+                    }
+                })
+            } 
+        return { ...state, table: table, roundStarted: true, player: state.roundNum % state.players}
 
-            case PICK_TILES:
-                
-            const {display: pickedDisplay, color: pickedColor} = action.payload
-            const pickedTable = _.cloneDeep(state.table)
-            const tilesOnDisplay = pickedTable[pickedDisplay]
+        case PICK_TILES:
+            
+        const {display: pickedDisplay, color: pickedColor} = action.payload
+        const pickedTable = _.cloneDeep(state.table)
+        const tilesOnDisplay = pickedTable[pickedDisplay]
 
-            const pickedTiles = tilesOnDisplay.filter(tile => { 
-                return pickedColor === tile.color
-            })
-            const dropTiles = tilesOnDisplay.filter(tile => {
-                return pickedColor !== tile.color
-            })
-            dropTiles.forEach(tile => {
-                tile.display = 0
-            })
-            pickedTable[pickedDisplay] = dropTiles
-            
-            return { ...state, pickedTiles: pickedTiles, dropTiles: dropTiles} 
-            
+        const pickedTiles = tilesOnDisplay.filter(tile => { 
+            return pickedColor === tile.color
+        })
+        const dropTiles = tilesOnDisplay.filter(tile => {
+            return pickedColor !== tile.color
+        })
+        dropTiles.forEach(tile => {
+            tile.display = 0
+        })
+        pickedTable[pickedDisplay] = dropTiles
+        
+        return { ...state, pickedTiles: pickedTiles, dropTiles: dropTiles} 
+        
         case DROP_TILES :
             return { ...state, pickedTiles: [], dropTiles: [] }   
 
@@ -351,6 +351,7 @@ const reducer = (state = initialState, action) => {
         case RESTART:
             sessionStorage.clear()
             return initialState
+
         default:
             return state
     }
