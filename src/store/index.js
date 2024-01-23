@@ -96,7 +96,6 @@ const reducer = (state = initialState, action) => {
                     blankTable = Array(10).fill([])
                     break
                 default:
-                    console.log('?');
             }
             let bag = Array(100) //fill the bag
                 .fill('red', 0, 20)
@@ -217,8 +216,6 @@ const reducer = (state = initialState, action) => {
             }
 
             sessionStorage.setItem('state', JSON.stringify(stateCopy))
-            // const lastState = sessionStorage.getItem('state')
-            // console.log(lastState);
 
             return stateCopy
         
@@ -296,14 +293,12 @@ const reducer = (state = initialState, action) => {
                     for (let wallLine of playerBoards[p].wall) { 
                         if (wallLine.every(tileSpace => tileSpace.filled)) {
                             playerBoards[p].score += 2
-                            console.log(`player ${p + 1} line filled`)
                         }
                         for(let i = 0; i < 5; i++) {
                             if (wallLine[i].filled) {
                                 verticalFilledTiles[i]++
                                 if (verticalFilledTiles[i] === 5) {
                                     playerBoards[p].score += 7
-                                    console.log(`player ${p + 1} column ${i + 1} filled`);
                                 }
                             }
                         }
@@ -314,7 +309,6 @@ const reducer = (state = initialState, action) => {
                                 colorCounter[tileSpace.color]++
                                 if (colorCounter[tileSpace.color] === 5) {
                                     playerBoards[p].score += 10
-                                    console.log(`player ${p + 1} color ${tileSpace.color} filled`);
                             }
                             }
                             
@@ -334,7 +328,6 @@ const reducer = (state = initialState, action) => {
                     } else return prev
                     
                 }, {id: [], score: (-Infinity)})
-                console.log(state.playersNames);
                 if (winArr.id.length === 1) {
                     gameEndedInfo = state.playersNames[winArr.id[0]] || 'player ' + (winArr.id[0] + 1) + ' won!'
                 } else {

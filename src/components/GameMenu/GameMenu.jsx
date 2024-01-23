@@ -10,7 +10,6 @@ const GameMenu = () => {
     const players = useSelector(state => state.players)
     const playersNames = useSelector(state => state.playersNames)
     const ready = playersNames.length === players && !(playersNames.includes('') || playersNames.includes(null)) ? true : false
-    console.log(ready)
 
     const setPlayers = (e, playerN) => {
         dispatch({type: 'SET_PLAYER', payload: {name: e.target.value, playerNo:playerN}})
