@@ -2,3 +2,6 @@ Azul (Portuguese for blue) is an abstract strategy board game. In Azul players c
 Since Azul is played openly, the game can be played on one screen, so here is digital version of it <br/>
 Here are full rules <br/>
 https://www.ultraboardgames.com/azul/game-rules.php <br/>
+
+try it here
+https://azul-game-vercel.vercel.app/
